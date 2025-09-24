@@ -1,0 +1,15 @@
+prometheus:
+  alertmanager:
+    enabled: false
+  server:
+    persistentVolume:
+      enabled: false
+
+grafana:
+  adminPassword: "supersecret"
+  persistence:
+    enabled: false
+
+prometheus-node-exporter:
+  hostRootFsMount:
+    enabled: true
