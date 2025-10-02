@@ -21,7 +21,7 @@ jobs:
         with:
           version: v3.15.2
 
-      - name: Build and package all charts
+      - name: Package all charts
         run: |
           mkdir -p repo
           for chart in charts/*; do
@@ -29,12 +29,18 @@ jobs:
               echo "Processing $chart..."
               helm dependency update "$chart"
               helm package "$chart" -d repo
+            else
+              echo "Skipping $chart — no Chart.yaml found!"
             fi
           done
+          echo "Files in repo after packaging:"
+          ls -l repo/
 
       - name: Generate Helm repo index
         run: |
           helm repo index repo --url https://alexiscarbillet.github.io/helm-charts
+          echo "index.yaml generated:"
+          cat repo/index.yaml
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -42,4 +48,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: repo
-          force_orphan: true   # 👈 ensures old files are removed
+          force_orphan: true
