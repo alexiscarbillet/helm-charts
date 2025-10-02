@@ -6,11 +6,12 @@ on:
       - main
 
 permissions:
-  contents: write 
+  contents: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,21 +23,22 @@ jobs:
 
       - name: Build and package all charts
         run: |
+          mkdir -p repo
           for chart in charts/*; do
             if [ -f "$chart/Chart.yaml" ]; then
-              echo "Building $chart..."
+              echo "Processing $chart..."
               helm dependency update "$chart"
-              helm package "$chart"
+              helm package "$chart" -d repo
             fi
           done
 
       - name: Generate index.yaml
         run: |
-          helm repo index . --url https://alexiscarbillet.github.io/my-helm-charts
+          helm repo index repo --url https://alexiscarbillet.github.io/helm-charts
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: .
+          publish_dir: repo
