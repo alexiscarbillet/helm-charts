@@ -1,0 +1,49 @@
+apiVersion: v1
+entries:
+  logging-stack:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-10-02T22:21:01.410775109Z"
+    dependencies:
+    - name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: 0.46.7
+    - name: loki
+      repository: https://grafana.github.io/helm-charts
+      version: 3.5.0
+    - name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 8.3.5
+    description: Logging stack including Loki, fluent-bit, and Grafana dashboards
+    digest: 97d21814555b4dc7ea86688e41ae92dcd87e2ca203f089b43509062bcac4b4e2
+    maintainers:
+    - name: alexiscarbillet
+    name: logging-stack
+    type: application
+    urls:
+    - https://alexiscarbillet.github.io/helm-charts/logging-stack-0.1.0.tgz
+    version: 0.1.0
+  monitoring-stack:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-10-02T22:21:01.421096698Z"
+    dependencies:
+    - name: prometheus
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 25.8.*
+    - name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 8.5.*
+    - name: prometheus-node-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.36.*
+    description: Monitoring stack including Grafana, Prometheus, and Node Exporter
+    digest: e2a4b95af834566fa7610a0e8320188d0504c2b90a5694ea23e5a5d88797dd63
+    maintainers:
+    - name: alexiscarbillet
+    name: monitoring-stack
+    type: application
+    urls:
+    - https://alexiscarbillet.github.io/helm-charts/monitoring-stack-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-10-02T22:21:01.398855656Z"
