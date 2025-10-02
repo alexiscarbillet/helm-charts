@@ -20,14 +20,15 @@ jobs:
         with:
           version: v3.15.2
 
-      - name: Build dependencies
+      - name: Build and package all charts
         run: |
-          cd monitoring-stack
-          helm dependency update
-
-      - name: Package chart
-        run: |
-          helm package monitoring-stack
+          for chart in charts/*; do
+            if [ -f "$chart/Chart.yaml" ]; then
+              echo "Building $chart..."
+              helm dependency update "$chart"
+              helm package "$chart"
+            fi
+          done
 
       - name: Generate index.yaml
         run: |
