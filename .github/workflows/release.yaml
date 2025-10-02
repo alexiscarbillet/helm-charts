@@ -32,7 +32,7 @@ jobs:
             fi
           done
 
-      - name: Generate index.yaml
+      - name: Generate Helm repo index
         run: |
           helm repo index repo --url https://alexiscarbillet.github.io/helm-charts
 
@@ -42,3 +42,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: repo
+          force_orphan: true   # 👈 ensures old files are removed
