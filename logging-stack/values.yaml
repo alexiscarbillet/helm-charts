@@ -1,0 +1,39 @@
+# Global values for the stack
+global:
+  storageClass: ""
+
+# Fluent Bit configuration
+fluent-bit:
+  serviceAccount:
+    create: true
+  config:
+    outputs: |
+      [OUTPUT]
+          Name              loki
+          Match             *
+          Host              loki
+          Port              3100
+          Labels            job=fluent-bit
+  tolerations: []
+  nodeSelector: {}
+
+# Loki configuration
+loki:
+  persistence:
+    enabled: true
+    size: 10Gi
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 100m
+
+# Grafana configuration
+grafana:
+  adminPassword: "supersecret"  # 👈 users should override this
+  persistence:
+    enabled: true
+    size: 2Gi
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
