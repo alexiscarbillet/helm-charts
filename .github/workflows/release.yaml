@@ -13,35 +13,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up Helm
       - name: Set up Helm
         uses: azure/setup-helm@v4
         with:
           version: v3.15.2
 
+      # 3️⃣ Update dependencies for all charts
+      - name: Update chart dependencies
+        run: |
+          for chart in charts/*; do
+            if [ -f "$chart/Chart.yaml" ]; then
+              echo "Updating dependencies for $chart..."
+              helm dependency update "$chart"
+            fi
+          done
+
+      # 4️⃣ Package all charts
       - name: Package all charts
         run: |
           mkdir -p repo
           for chart in charts/*; do
             if [ -f "$chart/Chart.yaml" ]; then
-              echo "Processing $chart..."
-              helm dependency update "$chart"
+              echo "Packaging $chart..."
               helm package "$chart" -d repo
-            else
-              echo "Skipping $chart — no Chart.yaml found!"
             fi
           done
           echo "Files in repo after packaging:"
           ls -l repo/
 
+      # 5️⃣ Fail if no charts were packaged
+      - name: Check packaged charts
+        run: |
+          if [ -z "$(ls -A repo/*.tgz 2>/dev/null)" ]; then
+            echo "ERROR: No charts were packaged!"
+            exit 1
+          fi
+
+      # 6️⃣ Generate Helm repo index
       - name: Generate Helm repo index
         run: |
           helm repo index repo --url https://alexiscarbillet.github.io/helm-charts
           echo "index.yaml generated:"
           cat repo/index.yaml
 
+      # 7️⃣ Publish to GitHub Pages
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

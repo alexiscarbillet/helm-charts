@@ -1,15 +1,9 @@
 prometheus:
-  alertmanager:
-    enabled: false
-  server:
-    persistentVolume:
-      enabled: false
+  replicas: 1
 
 grafana:
-  adminPassword: "supersecret"
-  persistence:
-    enabled: false
+  adminUser: admin
+  adminPassword: supersecret
 
-prometheus-node-exporter:
-  hostRootFsMount:
-    enabled: true
+nodeExporter:
+  tolerations: []
